@@ -1,0 +1,20 @@
+sub main
+    set a 3
+    print a
+    call foo
+
+    call foo
+    print a
+
+sub Hello
+    call foo3
+
+sub foo
+    set b 4
+    call foo2
+
+sub foo2
+    call Hello
+
+sub foo3
+    set a 5
