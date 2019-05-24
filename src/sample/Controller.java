@@ -40,7 +40,7 @@ public class Controller {
 
 
         for(int i = 0; frScan.hasNextLine(); i++) {
-            codeList.getItems().add("(" + (i + 1) + ") " + frScan.nextLine());
+            codeList.getItems().add((i + 1) + ") " + frScan.nextLine());
         }
 
         buttonTrace.setOnAction(actionEvent -> printStackTrace());
@@ -72,7 +72,7 @@ public class Controller {
 
         System.out.println("Stack trace:");
         if(traceIterator.hasPrevious()) {
-            System.out.println(findFuncName((int)traceIterator.previous()));
+            System.out.println(findFuncName((int)traceIterator.previous()) + " (" + (curIndexString + 1) + ")");
         }
         while(traceIterator.hasPrevious()) {
             System.out.println(findFuncName((int)traceIterator.previous()) + " (" + ((int)traceIndexIterator.previous() + 1) + ")");
@@ -111,8 +111,7 @@ public class Controller {
                 return functionList.get(i);
             }
         }
-        System.out.println("Incorrect func index");
-        return "";
+        throw new RuntimeException("Incorrect func index");
     }
 
     private int findFuncPosition(String func) {
@@ -121,8 +120,7 @@ public class Controller {
                 return indexFunctionList.get(i);
             }
         }
-        System.out.println("Incorrect func name");
-        return -1;
+        throw new RuntimeException("Incorrect func name");
     }
 
     private void goToFunction(int i) {
@@ -160,10 +158,8 @@ public class Controller {
             buttonStepOver.setDisable(true);
             buttonTrace.setDisable(true);
             buttonVar.setDisable(true);
-            String curString = codeList.getItems().get(curIndexString);
-            if(curString.charAt(0) == '>') {
-                curString = curString.substring(1);
-                codeList.getItems().set(curIndexString, curString);
+            if(codeList.getItems().get(curIndexString).charAt(0) == '>') {
+                codeList.getItems().set(curIndexString, codeList.getItems().get(curIndexString).substring(1));
             }
         } else {
             setNewCurIndexString(stackTraceIndex.getLast());
@@ -173,14 +169,12 @@ public class Controller {
     }
 
     private void setNewCurIndexString(int i) {
-        String curString = codeList.getItems().get(curIndexString);
-        if(curString.charAt(0) == '>') {
-            curString = curString.substring(1);
-            codeList.getItems().set(curIndexString, curString);
+        if(codeList.getItems().get(curIndexString).charAt(0) == '>') {
+            codeList.getItems().set(curIndexString, codeList.getItems().get(curIndexString).substring(1));
         }
         curIndexString = i;
         codeList.getItems().set(curIndexString, ">" + codeList.getItems().get(curIndexString));
-        updateCurString();
+        curString = mySplit(codeList.getItems().get(curIndexString));
     }
 
     private void createFunctionList() {
@@ -191,10 +185,6 @@ public class Controller {
                 indexFunctionList.add(i);
             }
         }
-    }
-
-    private void updateCurString() {
-        curString = mySplit(codeList.getItems().get(curIndexString));
     }
 
     private ArrayList<String> mySplit(String soursStr) {
