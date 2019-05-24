@@ -200,21 +200,11 @@ public class Controller {
     private ArrayList<String> mySplit(String soursStr) {
         String[] tmpStr = soursStr.split(" ");
         ArrayList<String> res = new ArrayList<>();
-        for(String str : tmpStr) {
-            if(checkString(str)) {
-                res.add(str);
+        for(int i = 1; i < tmpStr.length; i++) {
+            if(!tmpStr[i].equals("")) {
+                res.add(tmpStr[i]);
             }
         }
         return res;
-    }
-
-    private boolean checkString(String str) {
-        try {
-            return str.charAt(0) >= 'a' && str.charAt(0) <= 'z' || str.charAt(0) >= 'A' && str.charAt(0) <= 'Z'
-                    || str.charAt(0) >= '0' && str.charAt(0) <= '9' || str.charAt(0) == '_';
-        } catch(Exception ex) {
-            return false;
-        }
-
     }
 }
